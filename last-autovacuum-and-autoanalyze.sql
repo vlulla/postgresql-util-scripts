@@ -6,5 +6,5 @@ select
 from pg_class c
   join pg_namespace ns on c.relnamespace  = ns.oid
   join pg_stat_all_tables on (c.relname = pg_stat_all_tables.relname and ns.nspname = pg_stat_all_tables.schemaname)
-where ns.nspname not in ('pg_toast')
+where ns.nspname not in ('pg_toast') and has_schema_privilege(ns.nspname,'USAGE')
 order by last_autoanalyze desc;
