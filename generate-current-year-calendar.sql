@@ -13,5 +13,5 @@ select
   dy::date
   -- to_char(dy,'MON, DD') dy
   , to_char(dy,'IW') iso_week, to_char(dy,'WW') week_number,to_char(dy,'DY') d,to_char(dy,'D') dow from days
-\crosstabview week_number d dy dow
+\crosstabview week_number d dy
 -- ;
