@@ -10,7 +10,7 @@ with recommendations(name, recommended, reason) as (values
     ('max_parallel_workers_per_gather', '4', ' 0.25 * #CPU'),
     ('max_parallel_workers', '8', ' 1.0 * #CPU')
 ),
-settings(name, currsetting, unit) as (
-  select name, setting, unit from pg_settings where name in (select name from recommendations)
+settings(name, current) as (
+  select name, pg_catalog.current_setting(name) from pg_settings where name in (select name from recommendations)
 )
 select * from settings s join recommendations r using(name);
