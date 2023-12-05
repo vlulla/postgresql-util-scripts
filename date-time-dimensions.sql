@@ -9,20 +9,22 @@ select
  ,to_char(datum,'TMMonth') as MonthName
  ,extract(day from datum) as Day
  ,extract(doy from datum) as DayOfYear
- ,to_char(datum,'TMDay') as WeekdayName
+ ,to_char(datum,'TMDy') as WeekdayName
  ,extract(week from datum) as CalendarWeek
  ,to_char(datum,'yyyy.mm.dd') as FormattedDate
  ,'Q'||to_char(datum,'Q') as Quarter
  ,to_char(datum,'yyyy/"Q"Q') as YearQuarter
  ,to_char(datum,'yyyy/mm') as YearMonth
  ,to_char(datum,'iyyy/IW') as ISOYearCalendarWeek
- ,case when extract(isodow from datum) in (6,7) then 'Weekend' else 'Weekday' end as Weekend
+ -- ,case when extract(isodow from datum) in (6,7) then 'Weekend' else 'Weekday' end as Weekend
+ ,extract(isodow from datum) in (6,7) as isweekend
  -- ISO start and end of the week of this date! -- VERY USEFUL!
  ,datum::date + (1 - extract(isodow from datum))::integer as CWStart
  ,datum::date + (7 - extract(isodow from datum))::integer as CWEnd
  ,datum::date + (1 - extract(day from datum))::integer as MonthStart
  ,(datum::date + (1 - extract(day from datum))::integer + '1 month'::interval - interval '1 day')::date as MonthEnd
-from generate_series('2010-01-01'::date,'2019-12-31'::date,interval '1 day') as df(datum)
+ ,(datum::date + (1 - extract(day from datum))::integer + '1 month'::interval                   )::date - (datum::date + (1 - extract(day from datum))::integer) as MonthDays
+from generate_series((date_trunc('year',current_date)-interval '3 year')::date,(date_trunc('year',current_date)+interval '5 year')::date,interval '1 day') as df(datum)
 order by datum
 ;
 
