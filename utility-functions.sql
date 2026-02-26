@@ -16,3 +16,6 @@ create or replace function if(cond boolean, true_result anyelement, false_result
 
 create or replace function iso_yyyyweek(x anyelement) returns integer language sql as $$ select cast(to_char(cast(x as date), 'IYYYIW'  ) as int) $$;
 create or replace function iso_yyyyday (x anyelement) returns integer language sql as $$ select cast(to_char(cast(x as date), 'IYYYIDDD') as int) $$;
+
+-- double angle quotes ... especially useful for determining spaces at either end of strings.
+create or replace function daquote(x anyelement) returns text language sql as $$ select chr(0xab)||x||chr(0xbb) $$;
